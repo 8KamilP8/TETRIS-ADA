@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<Locations >
+  <Project >
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project />
+      <vfs_file>E:\Studia\WIR\PROJEKT\Tetris\src\nt_console.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 25" line=" 34" >
+      <vfs_project>E:\Studia\WIR\PROJEKT\Tetris\src\default.gpr</vfs_project>
+      <vfs_file>E:\Studia\WIR\PROJEKT\Tetris\src\nt_console.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project>E:\Studia\WIR\PROJEKT\Tetris\src\default.gpr</vfs_project>
+      <vfs_file>E:\Studia\WIR\PROJEKT\Tetris\src\nt_console.ads</vfs_file>
+    </file_marker>
+    <file_marker current="true" column=" 1" line=" 1" >
+      <vfs_project>E:\Studia\WIR\PROJEKT\Tetris\src\default.gpr</vfs_project>
+      <vfs_file>E:\Studia\WIR\PROJEKT\Tetris\src\nt_console.adb</vfs_file>
+    </file_marker>
+  </Project>
+</Locations>
