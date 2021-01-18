@@ -1,7 +1,8 @@
 with NT_Console;              use NT_Console;
 with Ada.Text_IO;             use Ada.Text_IO;
-with board;
 package body blocks is
+ 
+
    procedure RotateBlock(origin : in Point, rotateDirection : in RotateDirection, block : in out BlockPoints) is
       newPoints : BlockPoints := block;
       collision : Boolean := False;
@@ -41,6 +42,11 @@ package body blocks is
       end loop;
       origin := newOrigin;
    end MoveBlock;
+   
+	procedure GetType(block: out BlockTypes) is
+		Reset(Gen);
+		block:= Random(Gen);
+	end GetType;
    O: constant BlockPoints := ((0, 1), (0, 0), (1, 0), (1, 1));
    -- @@
    -- @@
