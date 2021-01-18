@@ -1,7 +1,6 @@
 with NT_Console;              use NT_Console;
 with Ada.Text_IO;             use Ada.Text_IO;
 package body blocks is
- 
 
    procedure RotateBlock(origin : in Point, rotateDirection : in RotateDirection, block : in out BlockPoints) is
       newPoints : BlockPoints := block;
@@ -77,4 +76,5 @@ package body blocks is
    --$
    --@
    --@
+	BlockTypesArray:= (O, L, J, T, S, Z, I);
 end blocks;
