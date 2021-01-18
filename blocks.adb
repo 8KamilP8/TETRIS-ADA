@@ -1,5 +1,6 @@
 with NT_Console;              use NT_Console;
 with Ada.Text_IO;             use Ada.Text_IO;
+with board;
 package body blocks is
    procedure RotateBlock(origin : in Point, rotateDirection : in RotateDirection, block : in out BlockPoints) is
       newPoints : BlockPoints := block;
@@ -26,8 +27,19 @@ package body blocks is
       end loop;
       block := newPoints;
    end RotateBlock;
-   procedure MoveBlock(origin : in out Point, rotateDirection : in RotateDirection, block : in out BlockPoints) is
-
+   procedure MoveBlock(origin : in out Point, direction : in Point, block : in out BlockPoints) is
+      newOrigin : Point := origin;
+      collision : Boolean := False;
+   begin
+      newOrigin.x := newOrigin.x + direction.x;
+      newOrigin.y := newOrigin.y + direction.y;
+      for i in range(1..4) loop
+         collision := board.CheckCollision((newOrigin.x + block(i).x, newOrigin.y + block(i).y));
+         if collision then
+            return;
+         end if;
+      end loop;
+      origin := newOrigin;
    end MoveBlock;
    O: constant BlockPoints := ((0, 1), (0, 0), (1, 0), (1, 1));
    -- @@

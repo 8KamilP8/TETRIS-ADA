@@ -5,7 +5,10 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with blocks; use blocks;
 with board use board;
 procedure Main is
-
+   type ActiveBlock is record
+      origin : Point;
+      shape : BlockPoints;
+   end record;
    procedure DisplayBoard is
    begin
       Set_Foreground (White);
@@ -87,7 +90,7 @@ procedure Main is
       end GetKey;
    end InputBuf;
 
-
+activeBlock : ActiveBlock;
 begin
    --  Insert code here.
    Clear_Screen();
