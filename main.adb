@@ -6,8 +6,6 @@ with blocks; use blocks;
 with board use board;
 procedure Main is
 
-   XBoardSize := 10;
-   YBoardSize := 20;
    procedure DisplayBoard is
    begin
       Set_Foreground (White);
