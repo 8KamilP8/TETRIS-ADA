@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Locations >
+  <Project >
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project />
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\board.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project />
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\blocks.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 69" >
+      <vfs_project>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\default.gpr</vfs_project>
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\blocks.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project />
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 22" line=" 82" >
+      <vfs_project>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\default.gpr</vfs_project>
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\default.gpr</vfs_project>
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\main.ads</vfs_file>
+    </file_marker>
+    <file_marker column=" 2" line=" 4" >
+      <vfs_project>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\default.gpr</vfs_project>
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\blocks.adb</vfs_file>
+    </file_marker>
+    <file_marker current="true" column=" 1" line=" 1" >
+      <vfs_project />
+      <vfs_file>E:\Studia\WIR\PROJEKT\TetrisLast\TETRIS-ADA\board.ads</vfs_file>
+    </file_marker>
+  </Project>
+</Locations>

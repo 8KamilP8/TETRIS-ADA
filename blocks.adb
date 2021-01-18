@@ -42,9 +42,9 @@ package body blocks is
       origin := newOrigin;
    end MoveBlock;
    
-	procedure GetType(block: out BlockTypes) is
+	procedure GetType(block: out BlockPoints) is
 		Reset(Gen);
-		block:= Random(Gen);
+		block:= BlockTypesArray(Random(Gen));
 	end GetType;
    O: constant BlockPoints := ((0, 1), (0, 0), (1, 0), (1, 1));
    -- @@

@@ -19,7 +19,7 @@ procedure Main is
             Goto_XY(x,y);
             if y = 0 or y = YBoardSize+1 or x = 0 or x = XBoardSize+1 then
                Put ("#");
-            elsif Board.CheckCollision((x,y)) then
+            elsif Board.CheckCollision((x,y)) or IsOnActiveBlock((x,y)) then
                Put("@");
             else
                Put(".");
@@ -32,7 +32,14 @@ procedure Main is
       Put("[ TETRIS IN ADA ]");
    end DisplayBoard;
 
-
+   function IsOnActiveBlock(point : in Point)return Boolean is
+      for i in range(1..4) loop
+         if(activeBlock.origin + activeBlock.shape(i) = point) then
+            return True;
+         end if;
+      end loop;
+      return False;
+   end IsOnActiveBlock;
 
    task GameInput;
    task InputReciever is
@@ -44,12 +51,14 @@ procedure Main is
       loop
          select
             accept Get(key: in Character) do
-               if key = 'a' then
-                  xE := xE-1;
-                  DisplayBoard;
-               elsif key = 'd' then
-                  xE := xE+1;
-                  DisplayBoard;
+               if key = 'a' or key = 'A' then
+                  blocks.MoveBlock(activeBlock.origin,(-1,0),activeBlock.shape);
+               elsif key = 'd' or key = 'D' then
+                  blocks.MoveBlock(activeBlock.origin,(1,0),activeBlock.shape);
+               elsif key = 'e' or key = 'E' then
+                  blocks.RotateDirection(RotateDirection.Right);
+               elsif key = 'q' or key = 'Q' then
+                  blocks.RotateDirection(RotateDirection.Left);
                end if;
             end Get;
          or
@@ -92,7 +101,8 @@ procedure Main is
 
 activeBlock : ActiveBlock;
 begin
-   --  Insert code here.
+   GetType(activeBlock.shape);
+   activeBlock.origin := (5,0);
    Clear_Screen();
    DisplayBoard;
 end Main;
