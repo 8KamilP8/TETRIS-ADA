@@ -1,20 +1,20 @@
 
 package body Board is
 
-   function CheckCollision(P : in Point) return Boolean is 
+   function CheckCollision(P : in Point) return Integer is 
    begin
       if P.x <= 0 or P.x > XBoardSize or P.y > YBoardSize then
-         return True;
+         return 1;
       end if;
       if P.y <= 0 then
-         return False;
+         return 0;
       end if;
-      return boardElements(P.x,P.y) >= 1;
+      return boardElements(P.x,P.y);
    end CheckCollision;
    function CheckClear(line : in Integer) return Boolean is
    begin         
       for x in Integer range 1..(XBoardSize) loop
-         if CheckCollision((x,line)) = False then
+         if CheckCollision((x,line)) = 0 then
             return False;
          end if;
       end loop; 

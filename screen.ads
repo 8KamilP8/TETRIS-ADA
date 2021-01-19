@@ -5,6 +5,7 @@ package Screen is
    protected ScreenDisplay is
       
       entry DisplayBoard(bp : in BlockPoints;origin : in Point);
+      entry DisplayBoardWithoutActiveBlock;
       entry DisplayNext(bt : in BlockTypes) ;
       entry DisplayScore(score : in Integer);
    private 

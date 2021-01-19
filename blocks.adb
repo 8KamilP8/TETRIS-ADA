@@ -4,7 +4,7 @@ package body blocks is
     
    function RotateBlock(origin : in Point; direction : in RotateDirection; block : in out BlockPoints) return Boolean is
       newPoints : BlockPoints := block;
-      collision : Boolean := False;
+      collision : Integer := 0;
       new_x : Integer := -1;
       new_y : Integer := -1;
    begin
@@ -21,7 +21,7 @@ package body blocks is
             new_y:=-block(i).x;
          end if;
          collision := CheckCollision((origin.x + new_x, origin.y + new_y));
-         if collision = True then
+         if collision > 0 then
             return False;
          end if;
          newPoints(i).x := new_x;
@@ -32,13 +32,13 @@ package body blocks is
    end RotateBlock;
    function MoveBlock(origin : in out Point; direction : in Point; block : in out BlockPoints) return Boolean is
       newOrigin : Point := origin;
-      collision : Boolean := False;
+      collision : Integer := 0;
    begin
       newOrigin.x := newOrigin.x + direction.x;
       newOrigin.y := newOrigin.y + direction.y;
       for i in Integer range 1..4 loop
-         collision := board.CheckCollision((newOrigin.x + block(i).x, newOrigin.y + block(i).y));
-         if collision then
+         collision := CheckCollision((newOrigin.x + block(i).x, newOrigin.y + block(i).y));
+         if collision > 0 then
             return False;
          end if;
       end loop;

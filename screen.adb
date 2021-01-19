@@ -20,9 +20,12 @@ package body Screen is
                elsif  IsOnActiveBlock((x,y),bp,origin) then
                   Set_Foreground (Yellow);
                   Put("@");
-               elsif Board.CheckCollision((x,y)) then
+               elsif Board.CheckCollision((x,y)) = 1 then
                   Set_Foreground (White);
                   Put("@");
+               elsif Board.CheckCollision((x,y)) > 1 then
+                  Set_Foreground (White);
+                  Put("X");
                else
                   Set_Foreground (White);
                   Put(".");
@@ -36,6 +39,36 @@ package body Screen is
          
          Free := True;
       end DisplayBoard;
+      entry DisplayBoardWithoutActiveBlock when Free is 
+      begin
+         Free := False;
+         
+         Goto_XY (3, 1);
+         for y in Integer range 0..(board.YBoardSize+1) loop
+            for x in Integer range 0..(board.XBoardSize+1) loop
+               Goto_XY(x+3,y+1);
+               if y = 0 or y = YBoardSize+1 or x = 0 or x = XBoardSize+1 then
+                  Set_Foreground (White);
+                  Put ("#");
+               elsif Board.CheckCollision((x,y)) = 1 then
+                  Set_Foreground (White);
+                  Put("@");
+               elsif Board.CheckCollision((x,y)) > 1 then
+                  Set_Foreground (White);
+                  Put("X");
+               else
+                  Set_Foreground (White);
+                  Put(".");
+               end if;
+               Goto_XY(x+4,y);
+            end loop;
+            Goto_XY (3,y+2);
+         end loop;
+         Goto_XY(0,0);
+         Put("[ TETRIS IN ADA ]");
+         
+         Free := True;
+      end DisplayBoardWithoutActiveBlock;
       entry DisplayNext(bt : in BlockTypes) when FreeNext is 
       begin
          FreeNext := False;

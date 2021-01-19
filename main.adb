@@ -8,7 +8,10 @@ with blocks; use blocks;
 with Screen; use Screen;
 with buff; use buff;
 procedure Main is
-
+   task GameOverTask is
+      entry Over;
+      entry Reset;
+   end GameOverTask;
    type ActiveBlock is record
       origin : Point;
       shape : BlockPoints;
@@ -19,6 +22,8 @@ procedure Main is
    blockType : BlockTypes;
    score : Integer := 0;
    Answer : Character;
+   linesToSpeedUp : Integer := 10;
+   gameOver : Boolean := False;
    procedure Sort(Tab : in out IntArray) is
       k : Integer;
       KEY : Integer;
@@ -37,62 +42,79 @@ procedure Main is
    task Gravity is
       entry Start;
       entry Stop;
-      end Gravity;
+   end Gravity;
    task body Gravity is
       newBlock : BlockTypes;
       newNext : BlockTypes;
       linesToClear : IntArray(1..4) := (others => -1);
       lineCounter : Integer := 1;
       clear : Boolean := False;
-   begin
 
+   begin
       accept Start  do
          Next_Time := Ada.Real_Time.Clock;
 
          loop
             delay until Next_Time;
-            if MoveBlock(currentBlock.origin,(0,1),currentBlock.shape) then
-               ScreenDisplay.DisplayBoard(currentBlock.shape,currentBlock.origin);
-            else
-               -- exit when one or more blockpoints of currentBlock is less than 1
-               clear := False;
-               linesToClear := (others => -1);
-               lineCounter := 1;
-               for i in Integer range 1..4 loop
-                  board.boardElements(currentBlock.origin.x + currentBlock.shape(i).x ,currentBlock.origin.y + currentBlock.shape(i).y) := 1;
-                  if(board.CheckClear(currentBlock.origin.y + currentBlock.shape(i).y)) then
-                     clear := True;
-                     for k in Integer range linesToClear'First..linesToClear'Last loop
-                        if linesToClear(k) = currentBlock.origin.y + currentBlock.shape(i).y then
-                           clear := False;
-                        end if;
-                     end loop;
-                     if clear then
-                        linesToClear(lineCounter) := currentBlock.origin.y + currentBlock.shape(i).y;
-                        lineCounter := lineCounter+1;
-                     end if;
-                   end if;
-               end loop;
-               Sort(linesToClear);
-               if lineCounter = 5 then
-                  score := score+1000;
-               elsif lineCounter = 4 then
-                  score := score+500;
+            if gameOver = False then
+               if MoveBlock(currentBlock.origin,(0,1),currentBlock.shape) then
+                  ScreenDisplay.DisplayBoard(currentBlock.shape,currentBlock.origin);
                else
-                  score := score+(lineCounter-1)*100;
-               end if;
-               if lineCounter > 1 then
-                  ScreenDisplay.DisplayScore(score);
-               end if;
-               board.ClearLines(linesToClear);
-               Buffer.get(newBlock);
+                  -- exit when one or more blockpoints of currentBlock is less than 1
+                  clear := False;
+                  linesToClear := (others => -1);
+                  lineCounter := 1;
+                  for i in Integer range 1..4 loop
+                     if currentBlock.origin.y + currentBlock.shape(i).y < 1 then
+                        gameOver := True;
 
-               Buffer.preview(newNext);
-               ScreenDisplay.DisplayNext(newNext);
-               currentBlock.shape := blockArr(newBlock);
-               currentBlock.origin := (5,0);
+                     else
+                        board.boardElements(currentBlock.origin.x + currentBlock.shape(i).x ,currentBlock.origin.y + currentBlock.shape(i).y) := 1;
+                        if(board.CheckClear(currentBlock.origin.y + currentBlock.shape(i).y)) then
+                           clear := True;
+                           for k in Integer range linesToClear'First..linesToClear'Last loop
+                              if linesToClear(k) = currentBlock.origin.y + currentBlock.shape(i).y then
+                                 clear := False;
+                              end if;
+                           end loop;
+                           if clear then
+                              linesToClear(lineCounter) := currentBlock.origin.y + currentBlock.shape(i).y;
+                              lineCounter := lineCounter+1;
+                           end if;
+                        end if;
+                     end if;
+                  end loop;
+                  if gameOver then
+                     ScreenDisplay.DisplayBoardWithoutActiveBlock;
+                     GameOverTask.Over;
+                  else
+
+                     Sort(linesToClear);
+                     if lineCounter = 5 then
+                        score := score+1000;
+                     elsif lineCounter = 4 then
+                        score := score+500;
+                     else
+                        score := score+(lineCounter-1)*100;
+                     end if;
+                     if lineCounter > 1 then
+                        ScreenDisplay.DisplayScore(score);
+                     end if;
+                     board.ClearLines(linesToClear);
+                     Buffer.get(newBlock);
+                     linesToSpeedUp := linesToSpeedUp - lineCounter +1;
+                     if linesToSpeedUp <= 0 then
+                        linesToSpeedUp := 10 + linesToSpeedUp;
+                        Period := Period - Ada.Real_Time.Milliseconds(20);
+                     end if;
+                     Buffer.preview(newNext);
+                     ScreenDisplay.DisplayNext(newNext);
+                     currentBlock.shape := blockArr(newBlock);
+                     currentBlock.origin := (5,0);
+                  end if;
+               end if;
+               Next_Time := Next_Time + Period;
             end if;
-            Next_Time := Next_Time + Period;
          end loop;
       end Start;
    end Gravity;
@@ -117,11 +139,11 @@ procedure Main is
                   end if;
                elsif key = 'e' or key = 'E' then
                   if blocks.RotateBlock(currentBlock.origin,Right,currentBlock.shape) then
-                       ScreenDisplay.DisplayBoard(currentBlock.shape,currentBlock.origin);
+                     ScreenDisplay.DisplayBoard(currentBlock.shape,currentBlock.origin);
                   end if;
                elsif key = 'q' or key = 'Q' then
                   if blocks.RotateBlock(currentBlock.origin,Left,currentBlock.shape) then
-                       ScreenDisplay.DisplayBoard(currentBlock.shape,currentBlock.origin);
+                     ScreenDisplay.DisplayBoard(currentBlock.shape,currentBlock.origin);
                   end if;
                end if;
             end Get;
@@ -166,9 +188,38 @@ procedure Main is
    task body GenerateBrciks is
    begin
       loop
-            Buffer.add(GetType);
+         Buffer.add(GetType);
       end loop;
    end GenerateBrciks;
+
+   task body GameOverTask is
+   begin
+      loop
+      accept Over  do
+            for y in Integer range 1..YBoardSize loop
+               for x in Integer range 1..XBoardSize loop
+                  boardElements(x,y) := 3;
+                  ScreenDisplay.DisplayBoardWithoutActiveBlock;
+                  delay 0.01;
+               end loop;
+
+            end loop;
+            for y in Integer range 1..YBoardSize loop
+               for x in Integer range 1..XBoardSize loop
+                  boardElements(x,y) := 0;
+
+               end loop;
+
+            end loop;
+            Next_Time := Ada.Real_Time.Clock;
+            Period := Ada.Real_Time.Milliseconds(200);
+            score := 0;
+            gameOver := False;
+            linesToSpeedUp := 10;
+            Clear_Screen;
+         end Over;
+     end loop;
+   end GameOverTask;
 begin
    Set_Foreground (White);
    Set_Background (Black);

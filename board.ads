@@ -9,7 +9,7 @@ package Board is
       y : Integer;
    end record;
    type IntArray is array (Positive range <>) of Integer;
-   function CheckCollision(P : Point) return Boolean;
+   function CheckCollision(P : Point) return Integer;
    procedure ClearLine(line : in Integer);
    procedure ClearLines(lines : in out IntArray);
    function CheckClear(line : in Integer) return Boolean;
