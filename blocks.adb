@@ -1,80 +1,57 @@
 with NT_Console;              use NT_Console;
 with Ada.Text_IO;             use Ada.Text_IO;
 package body blocks is
-
-   procedure RotateBlock(origin : in Point, rotateDirection : in RotateDirection, block : in out BlockPoints) is
+    
+   function RotateBlock(origin : in Point; direction : in RotateDirection; block : in out BlockPoints) return Boolean is
       newPoints : BlockPoints := block;
       collision : Boolean := False;
+      new_x : Integer := -1;
+      new_y : Integer := -1;
    begin
-      if block = O then
-         return;
+      if block = O_points then
+         return False;
       end if;
-      for i in range(1..4) loop
-         if rotateDirection = RotateDirection.Right then
+      for i in Integer range 1..4 loop
+         if direction = Right then
             new_x:=-block(i).y;
             new_y:= block(i).x;
          end if;
-         if rotateDirection = RotateDirection.Left then
+         if direction = Left then
             new_x:=block(i).y;
             new_y:=-block(i).x;
          end if;
-         collision := CheckCollision(origin + (new_x,new_y));
+         collision := CheckCollision((origin.x + new_x, origin.y + new_y));
          if collision = True then
-            return;
+            return False;
          end if;
          newPoints(i).x := new_x;
          newPoints(i).y := new_y;
       end loop;
       block := newPoints;
+      return True;
    end RotateBlock;
-   procedure MoveBlock(origin : in out Point, direction : in Point, block : in out BlockPoints) is
+   function MoveBlock(origin : in out Point; direction : in Point; block : in out BlockPoints) return Boolean is
       newOrigin : Point := origin;
       collision : Boolean := False;
    begin
       newOrigin.x := newOrigin.x + direction.x;
       newOrigin.y := newOrigin.y + direction.y;
-      for i in range(1..4) loop
+      for i in Integer range 1..4 loop
          collision := board.CheckCollision((newOrigin.x + block(i).x, newOrigin.y + block(i).y));
          if collision then
-            return;
+            return False;
          end if;
       end loop;
-      origin := newOrigin;
+      origin.x := newOrigin.x;
+      origin.y := newOrigin.y;
+      return True;
    end MoveBlock;
    
-	procedure GetType(block: out BlockPoints) is
+   function GetType return BlockTypes is
+   begin
 		Reset(Gen);
-		block:= BlockTypesArray(Random(Gen));
+		return Random(Gen);
 	end GetType;
-   O: constant BlockPoints := ((0, 1), (0, 0), (1, 0), (1, 1));
-   -- @@
-   -- @@
-
-   L: constant BlockPoints := ((0, -1), (0, 0), (0, 1), (1, 1));
-   -- @
-   -- #
-   -- @@
-
-   J: constant BlockPoints := ((0, -1), (0, 0), (0, 1), (-1, 1));
-   -- @
-   -- #
-   --@@
-
-   T: constant BlockPoints := ((-1, 0), (0, 0), (1, 0), (0, 1));
-   --@#@
-   -- @
-
-   S: constant BlockPoints := ((1, 0), (0, 0), (-1, 1), (0, 1));
-   --  $@
-   -- @@
-   Z: constant BlockPoints := ((-1, 0), (0, 0), (0, 1), (1, 1));
-   -- @$
-   --  @@
-
-   I: constant BlockPoints := ((0, -1), (0, 0), (0, 1), (0, 2));
-   --@
-   --$
-   --@
-   --@
-	BlockTypesArray:= (O, L, J, T, S, Z, I);
+  
+	
 end blocks;
